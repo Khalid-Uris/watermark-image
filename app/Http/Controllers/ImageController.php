@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Image;
+use ProtoneMedia\LaravelFFMpeg\Filters\WatermarkFactory;
 
 class ImageController extends Controller
 {
@@ -105,4 +106,21 @@ class ImageController extends Controller
 
         return back();
     }
+    public function watermakeVideo()  {
+
+    $videoPath = public_path('videos/testing.mp4');
+    $imagePath = public_path('image/thumbnail/1698622197-2p.png');
+
+
+    FFMpeg::fromDisk('local')
+    ->open($videoPath)
+    ->addWatermark(function(WatermarkFactory $watermark) use ($imagePath) {
+        $watermark->fromDisk('local')
+            ->open($imagePath)
+            ->right(25)
+            ->bottom(25);
+    });
+
+}
+
 }
